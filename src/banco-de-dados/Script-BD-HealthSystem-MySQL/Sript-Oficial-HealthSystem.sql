@@ -171,24 +171,11 @@ CREATE TABLE IF NOT EXISTS `HealthSystem`.`Parametro` (
 -- Tabela `HealthSystem`.`Leitura`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `HealthSystem`.`Leitura` (
-  `fkEquipamento` INT NOT NULL,
-  `fkComponente` INT NOT NULL,
   `idLeitura` INT NOT NULL AUTO_INCREMENT,
-  `valor` FLOAT NOT NULL,
+  `temperatura` FLOAT,
+  `ociosidade` FLOAT,
   `momento` DATETIME NOT NULL,
-  PRIMARY KEY (`idLeitura`,`fkEquipamento`, `fkComponente`),
-  INDEX `fk_Equipamento_has_Componente_Componente1_idx` (`fkComponente` ASC) VISIBLE,
-  INDEX `fk_Equipamento_has_Componente_Equipamento1_idx` (`fkEquipamento` ASC) VISIBLE,
-  CONSTRAINT `fk_Equipamento_has_Componente_Equipamento2`
-    FOREIGN KEY (`fkEquipamento`)
-    REFERENCES `HealthSystem`.`Equipamento` (`idEquipamento`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Equipamento_has_Componente_Componente2`
-    FOREIGN KEY (`fkComponente`)
-    REFERENCES `HealthSystem`.`Componente` (`idComponente`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION
+  PRIMARY KEY (`idLeitura`)
     );
 	DESC `healthsystem`.`Leitura`;
 
@@ -196,4 +183,5 @@ CREATE TABLE IF NOT EXISTS `HealthSystem`.`Leitura` (
     
     TRUNCATE TABLE `healthsystem`.`Leitura`;
 	SELECT * FROM `healthsystem`.`leitura`;
-	
+    
+    DROP DATABASE healthsystem;
