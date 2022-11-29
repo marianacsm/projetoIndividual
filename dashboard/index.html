@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    
+    <script src="../../src/index.js"></script>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link href="../assets/img/favicon.png" rel="icon">
+
+    <title>Dashboard</title>
+
+    <!-- Custom fonts for this template-->
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/examples.css">
+    <link href="css/sb-admin-2.min.css" rel="stylesheet">
+
+</head>
+
+<body id="page-top" onload="buscarMaquinas()">
+
+    <div id="id_div_tudo" class="div_tudo" style="height: 100%; width: 100%; display: none; justify-content: center; background-color: rgba(0, 0, 0, 0.603); z-index: 99999999; position: absolute;">
+    <div class="div_mostrarGraficos" style="background-color: white; width: 70%; height: auto; position: absolute; z-index: 999; top: 10%; left: 20%; border-radius: 2%; display: block; box-shadow: rgba(0, 0, 0, 0.35) 5px 5px 15px;">
+        <button onclick="fecharGrafico()" style="background-color: #a3d165; left: 10%; border-style: none;">X</button>
+        <canvas id="myChart" width="50%" height="25%"></canvas>
+    </div>
+    </div>
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+      
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+                <!-- Topbar -->
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+                    <!-- Sidebar Toggle (Topbar) -->
+                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                        <i class="fa fa-bars"></i>
+                    </button>
+
+                    <!-- Topbar Navbar -->
+                    <ul class="navbar-nav ml-auto">
+
+                        <!-- Nav Item - Search Dropdown (Visible Only XS) -->
+                        <li class="nav-item dropdown no-arrow d-sm-none">
+                            <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-search fa-fw"></i>
+                            </a>
+                            <!-- Dropdown - Messages -->
+                            <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
+                                aria-labelledby="searchDropdown">
+                                <form class="form-inline mr-auto w-100 navbar-search">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control bg-light border-0 small"
+                                            placeholder="Search for..." aria-label="Search"
+                                            aria-describedby="basic-addon2">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-primary" type="button">
+                                                <i class="fas fa-search fa-sm"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </li>
+
+                        <!-- Nav Item - Alerts -->
+                        <li class="nav-item dropdown no-arrow mx-1">
+                            <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-bell fa-fw"></i>
+                                <!-- Counter - Alerts -->
+                                <span class="badge badge-danger badge-counter">1+</span>
+                            </a>
+                            <!-- Dropdown - Alerts -->
+                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                aria-labelledby="alertsDropdown">
+                                <h6 class="dropdown-header">
+                                    Alerts Center
+                                </h6>
+                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <div class="mr-3">
+                                        <div class="icon-circle bg-primary">
+                                            <i class="fas fa-file-alt text-white"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="small text-gray-500">06 de Setembro, 2022</div>
+                                        <span class="font-weight-bold">Teve 3 alertas</span>
+                                    </div>
+                                </a>
+                            </div>
+                        </li>
+                        <div class="topbar-divider d-none d-sm-block"></div>
+
+                        <!-- Nav Item - User Information -->
+                        <li class="nav-item dropdown no-arrow">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Admin</span>
+                                <img class="img-profile rounded-circle" src="img/undraw_profile.svg">
+                            </a>
+                            <!-- Dropdown - User Information -->
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                aria-labelledby="userDropdown">
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Perfil
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Configurações
+                                </a>
+                                <!--                                 <a class="dropdown-item" href="#">
+                                    <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Activity Log
+                                </a> -->
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400" onclick="sair()"></i>
+                                    Sair
+                                </a>
+                            </div>
+                        </li>
+
+                    </ul>
+
+                </nav>
+                <!-- End of Topbar -->
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                    <!-- Content Row -->
+                    <div class="row">
+                        <!-- Earnings (Monthly) Card Example -->
+                        <div class="body flex-grow-1 px-3">
+                            <div class="container-lg">
+                              <div class="row">
+                                <div class="col-sm-6 col-lg-3">
+                                    <div class="card mb-4 text-white bg-danger">
+                                      <div class="card-body pb-0 d-flex justify-content-between align-items-start">
+                                        <div>
+                                          <div class="fs-4 fw-semibold">10/82 <span class="fs-6 fw-normal">(12.1%)
+                                              <svg class="icon">
+                                                <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-arrow-top"></use>
+                                              </svg></span></div>
+                                          <div>Chamados</div>
+                                        </div>                                       
+                                      </div>
+                                      <div class="c-chart-wrapper mt-3 mx-3" style="height:70px;">
+                                        <canvas class="chart" id="card-chart2" height="70"></canvas>
+                                      </div>
+                                    </div>
+                                </div>
+                                <!-- /.col-->
+                                <div class="col-sm-6 col-lg-3">
+                                    <div class="card mb-4 text-white bg-warning">
+                                      <div class="card-body pb-0 d-flex justify-content-between align-items-start">
+                                        <div>
+                                          <div class="fs-4 fw-semibold">72.5% <span class="fs-6 fw-normal">(Média)
+                                              <svg class="icon">
+                                                <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-arrow-top"></use>
+                                              </svg></span></div>
+                                          <div>CPU</div>
+                                        </div>
+                                      </div>
+                                      <div class="c-chart-wrapper mt-3 mx-3" style="height:70px;">
+                                        <canvas class="chart" id="card-chart2" height="70"></canvas>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="col-sm-6 col-lg-3">
+                                    <div class="card mb-4 text-white bg-success">
+                                      <div class="card-body pb-0 d-flex justify-content-between align-items-start">
+                                        <div>
+                                          <div class="fs-4 fw-semibold">40% <span class="fs-6 fw-normal">(Média)
+                                              <svg class="icon">
+                                                <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-arrow-top"></use>
+                                              </svg></span></div>
+                                          <div>Memória</div>
+                                        </div>
+                                      </div>
+                                      <div class="c-chart-wrapper mt-3 mx-3" style="height:70px;">
+                                        <canvas class="chart" id="card-chart2" height="70"></canvas>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="col-sm-6 col-lg-3">
+                                    <div class="card mb-4 text-white bg-success">
+                                      <div class="card-body pb-0 d-flex justify-content-between align-items-start">
+                                        <div>
+                                          <div class="fs-4 fw-semibold">20% <span class="fs-6 fw-normal">(Média)
+                                              <svg class="icon">
+                                                <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-arrow-top"></use>
+                                              </svg></span>
+                                            </div>
+                                          <div>Disco</div>
+                                        </div>
+                                      </div>
+                                      <div class="c-chart-wrapper mt-3 mx-3" style="height:70px;">
+                                        <canvas class="chart" id="card-chart2" height="70"></canvas>
+                                      </div>
+                                    </div>
+                                  </div>
+                                
+
+                    <!-- Content Row -->
+
+                    <div class="row">
+                        <div class="card-body">
+                            <div class="chart-area">
+                                <canvas id="myAreaChart"></canvas>
+                            </div>
+                        </div>
+                    </body>
+                      <!-- Bootstrap core JavaScript-->
+                      <script src="vendor/jquery/jquery.min.js"></script>
+                      <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+                    
+                      <!-- Core plugin JavaScript-->
+                      <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+                    
+                      <!-- Custom scripts for all pages-->
+                      <script src="js/sb-admin-2.min.js"></script>
+                    
+                      <!-- Page level plugins -->
+                      <script src="vendor/chart.js/Chart.min.js"></script>
+                    
+                      <!-- Page level custom scripts -->
+                      <script src="js/demo/chart-area-demo.js"></script>
+                      <script src="js/demo/chart-pie-demo.js"></script>
+
+            <!-- Scroll to Top Button-->
+            <a class="scroll-to-top rounded" href="#page-top">
+                <i class="fas fa-angle-up"></i>
+            </a>
+
+            <!-- Logout Modal-->
+            <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Você quer sair da sua conta?</h5>
+                            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            Selecione "Logout" abaixo se estiver pronto para encerrar sua sessão atual.</div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
+                            <a class="btn btn-primary" href="../index.html">Sair</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bootstrap core JavaScript-->
+            <script src="vendor/jquery/jquery.min.js"></script>
+            <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+            <!-- Core plugin JavaScript-->
+            <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+            <!-- Custom scripts for all pages-->
+            <script src="js/sb-admin-2.min.js"></script>
+
+            <!-- Page level plugins -->
+            <script src="vendor/chart.js/Chart.min.js"></script>
+
+            <!-- Page level custom scripts -->
+            <script src="js/demo/chart-area-demo.js"></script>
+            <script src="js/demo/chart-pie-demo.js"></script>
+
+</body>
+
+</html>
+
+<script>
+
+    function sair() {
+        window.location.href = "../index.html"
+    }
+
+    function buscarMaquinas(){
+
+        fetch(`/medidas/buscarMaquinas/`,{ cache: 'no-store' }).then(function (response) {
+        if (response.ok) {
+          response.json().then(function (resposta) {
+            console.log(`Dados recebidos: ${JSON.stringify(resposta)}`);
+            resposta.reverse();
+            console.log(resposta[0].maquinas)
+
+            let qtdMaquinas = resposta[0].maquinas
+
+            plotarMaquinas(qtdMaquinas)
+          });
+        } else {
+          console.error('Nenhum dado encontrado ou erro na API');
+        }
+      })
+      
+        // .catch(function (error) {
+        //   console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
+        // });
+    }
+
+    function plotarMaquinas(qtdMaquinas) {
+
+        let contador = 0
+        console.log(qtdMaquinas)
+        while (contador < qtdMaquinas) {
+
+           
+            
+            id_card_maquinas.innerHTML += ` <div class="maquina" id="maquina${contador+1}" onclick="obterDadosGrafico(${contador+1})">
+                                                <h4>Monitor ${contador+1}</h4><img src="../assets/img/monitorSticker.png">
+                                            </div>`
+
+            
+            contador ++
+                
+        }
+        
+    }
+
+    function obterDadosGrafico(idMaquina) {
+        // alterarTitulo(idMaquina)
+
+        // if (proximaAtualizacao != undefined) {
+        //     clearTimeout(proximaAtualizacao);
+        // }
+
+        fetch(`/medidas/ultimas/${idMaquina}`, { cache: 'no-store' }).then(function (response) {
+            if (response.ok) {
+                response.json().then(function (resposta) {
+                    console.log(`Dados recebidos: ${JSON.stringify(resposta[0])}`);
+                    resposta.reverse();
+                    plotarGrafico(resposta, idMaquina)
+                    mostrarGraficos()
+                    
+                });
+            } else {
+                console.error('Nenhum dado encontrado ou erro na API');
+            }
+        })
+            .catch(function (error) {
+                console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
+            });
+    }
+
+     // Esta função *plotarGrafico* usa os dados capturados na função anterior para criar o gráfico
+    // Configura o gráfico (cores, tipo, etc), materializa-o na página e, 
+    // A função *plotarGrafico* também invoca a função *atualizarGrafico*
+    function plotarGrafico(resposta, idMaquina) {
+        console.log('iniciando plotagem do gráfico...');
+
+        // Criando estrutura para plotar gráfico - labels
+        let labels = [];
+        
+        // Criando estrutura para plotar gráfico - dados
+        let dados = {
+            labels: labels,
+            datasets: [{
+                label: 'CPU',
+                data: [],
+                fill: false,
+                borderColor: 'rgb(75, 192, 192)',
+                tension: 0.1
+            },
+            {
+                label: 'Memória',
+                data: [],
+                fill: false,
+                borderColor: 'rgb(199, 52, 52)',
+                tension: 0.1
+            },
+            {
+                label: 'Disco',
+                data: [],
+                fill: false,
+                borderColor: 'rgb(199, 52, 52)',
+                tension: 0.1
+            }]
+        };
+        
+        console.log('----------------------------------------------')
+        console.log('Estes dados foram recebidos pela funcao "obterDadosGrafico" e passados para "plotarGrafico":')
+        console.log(resposta)
+        
+        // Inserindo valores recebidos em estrutura para plotar o gráfico
+        for (i = 0; i < resposta.length; i++) {
+            var registro = resposta[i];
+            labels.push(registro.momentoGrafico);
+
+            if (registro.nomeComponente == 'CPU'){
+                dados.datasets[0].data.push(registro.valor)
+            }
+
+            if (registro.nomeComponente == 'Memoria' || 'Memória'){
+                dados.datasets[1].data.push(registro.valor)
+            }
+
+            if (registro.nomeComponente == 'Disco'){
+                dados.datasets[2].data.push(registro.valor)
+            }
+            // dados.datasets[0].data.push(registro.CPU);
+            // dados.datasets[1].data.push(registro.Memoria);
+            // dados.datasets[2].data.push(registro.Disco);
+        }
+        
+        console.log('----------------------------------------------')
+        console.log('O gráfico será plotado com os respectivos valores:')
+        console.log('Labels:')
+        console.log(labels)
+        console.log('Dados:')
+        console.log(dados.datasets)
+        console.log('----------------------------------------------')
+        
+        // Criando estrutura para plotar gráfico - config
+        const config = {
+            type: 'line',
+            data: dados,
+        };
+
+        // Adicionando gráfico criado em div na tela
+        let myChart = new Chart(
+            document.getElementById('myChart'),
+            config
+        );
+         setTimeout(() => atualizarGrafico(idMaquina, dados, myChart), 2000);
+    }
+
+    function atualizarGrafico(idMaquina, dados, myChart) {
+
+fetch(`/medidas/tempo-real/${idMaquina}`, { cache: 'no-store' }).then(function (response) {
+    if (response.ok) {
+        response.json().then(function (novoRegistro) {
+
+            console.log(`Dados recebidos: ${JSON.stringify(novoRegistro)}`);
+            console.log(`Dados atuais do gráfico:`);
+            console.log(dados);
+
+            // document.getElementById("avisoCaptura").innerHTML = ""
+
+            if (novoRegistro[0].momentoGrafico == dados.labels[dados.labels.length - 1]) {
+                console.log("---------------------------------------------------------------")
+                console.log("Como não há dados novos para captura, o gráfico não atualizará.")
+                // document.getElementById("avisoCaptura").innerHTML = "<i class='fa-solid fa-triangle-exclamation'></i> Foi trazido o dado mais atual capturado pelo sensor. <br> Como não há dados novos a exibir, o gráfico não atualizará."
+                console.log("Horário do novo dado capturado:")
+                console.log(novoRegistro[0].momentoGrafico)
+                console.log("Horário do último dado capturado:")
+                console.log(dados.labels[dados.labels.length - 1])
+                console.log("---------------------------------------------------------------")
+            } else {
+                // tirando e colocando valores no gráfico
+                dados.labels.shift(); // apagar o primeiro
+                dados.labels.push(novoRegistro[0].momentoGrafico); // incluir um novo momento
+
+                if (novoRegistro.nomeComponente == 'CPU') {
+                dados.datasets[0].data.shift();
+                dados.datasets[0].data.push(novoRegistro[0].valor);
+                } 
+
+                if (novoRegistro.nomeComponente == 'CPU') {
+                dados.datasets[1].data.shift();  
+                dados.datasets[1].data.push(novoRegistro[0].valorMemoria);
+                }
+
+                if (novoRegistro.nomeComponente == 'CPU') {
+                dados.datasets[2].data.shift();  
+                dados.datasets[2].data.push(novoRegistro[0].valorDisco);
+                }
+
+                myChart.update();
+            }
+
+            // Altere aqui o valor em ms se quiser que o gráfico atualize mais rápido ou mais devagar
+            proximaAtualizacao = setTimeout(() => atualizarGrafico(idMaquina, dados, myChart), 2000);
+        });
+    } else {
+        console.error('Nenhum dado encontrado ou erro na API');
+        // Altere aqui o valor em ms se quiser que o gráfico atualize mais rápido ou mais devagar
+        proximaAtualizacao = setTimeout(() => atualizarGrafico(idMaquina, dados, myChart), 7000);
+    }
+})
+    .catch(function (error) {
+        console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
+    });
+
+}
+
+
+function fecharGrafico() {
+    id_div_tudo.style.display = "none"
+}
+
+function mostrarGraficos() {
+    id_div_tudo.style.display = "flex"
+}
+
+</script>
